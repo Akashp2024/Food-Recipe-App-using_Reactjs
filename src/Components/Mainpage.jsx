@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Mealcards from "./Mealcards";
+import { useLocation } from "react-router-dom";
 
 const Mainpage = () => {
-  const [data, setdata] = useState();
+  const location = useLocation();
+  const [data, setdata] = useState(location.state?.data || []);
   const [search, setsearch] = useState("");
   const [msg, setmsg] = useState("");
+
+  useEffect(() => {
+    if (location.state?.data) {
+      setdata(location.state.data);
+    }
+  }, [location.state]);
 
   const myfun = async () => {
     if (search === "") {
@@ -47,11 +55,7 @@ const Mainpage = () => {
       </div>
       <div className="results mt-4">
         <h2 className="text-center mb-4">{msg}</h2>
-        {data && (
-          <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
-            <Mealcards detail={data} />
-          </div>
-        )}
+        {data && <Mealcards detail={data} />}
       </div>
     </div>
   );

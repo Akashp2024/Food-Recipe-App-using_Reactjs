@@ -1,24 +1,34 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 const Mealinfo = () => {
   const { mealid } = useParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [info, setinfo] = useState("");
-  console.log(mealid);
 
-  const getinfo = async () => {
-    const get = await fetch(
-      `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealid}`
-    );
-    const jsondata = await get.json();
-    // console.log(jsondata.meals[0]);
-    setinfo(jsondata.meals[0]);
+  useEffect(() => {
+    const getinfo = async () => {
+      const get = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealid}`
+      );
+      const jsondata = await get.json();
+      setinfo(jsondata.meals[0]);
+    };
+    if (mealid) {
+      getinfo();
+    }
+  }, [mealid]);
+
+  const handleBackClick = () => {
+    navigate("/", {
+      state: {
+        data: location.state?.data || [],
+      },
+    });
   };
-  if (mealid != "") {
-    getinfo();
-  }
+
   return (
     <div className="container mx-auto p-4">
       {!info ? (
@@ -44,13 +54,12 @@ const Mealinfo = () => {
               <p className="text-gray-300 text-base">{info.strInstructions}</p>
             </div>
           </div>
-          <Link
-            to="/"
+          <button
+            onClick={handleBackClick}
             className="absolute bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out"
           >
             Back to HomePage
-          </Link>
-          {/* <a href="#">More Info</a> */}
+          </button>
         </div>
       )}
     </div>

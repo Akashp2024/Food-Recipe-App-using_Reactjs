@@ -2,34 +2,30 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 const Mealcards = ({ detail }) => {
-  console.log(detail);
   return (
     <div className="meals grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
       {!detail
         ? ""
         : detail.map((obj) => {
             return (
-              <div
-                className="card bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-500 hover:scale-105"
+              <NavLink
+                to={`/${obj.idMeal}`}
                 key={obj.idMeal}
+                state={{ data: detail }}
               >
-                <img
-                  src={obj.strMealThumb}
-                  alt=""
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-4">
-                  <h2 className="text-xl font-semibold mb-2">{obj.strMeal}</h2>
-                  <p className="text-gray-700 text-base mb-4 overflow-hidden overflow-ellipsis line-clamp-2">
-                    {obj.strInstructions}
-                  </p>
-                  <NavLink to={`/${obj.idMeal}`}>
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                      More Details
-                    </button>
-                  </NavLink>
+                <div className="card bg-white shadow-lg rounded-lg overflow-hidden transform transition duration-500 hover:scale-105">
+                  <img
+                    src={obj.strMealThumb}
+                    alt="food"
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-lg font-semibold text-gray-800">
+                      {obj.strMeal}
+                    </h3>
+                  </div>
                 </div>
-              </div>
+              </NavLink>
             );
           })}
     </div>
@@ -37,3 +33,4 @@ const Mealcards = ({ detail }) => {
 };
 
 export default Mealcards;
+// In the above code snippet, we have created a new component named Mealcards. This component is used to display the meal cards on the main page. It receives the meal details as props and maps over them to display each meal card. Each meal card is a clickable link that redirects to the Mealinfo component with the meal id as a parameter. The state containing the meal data is also passed along with the link to maintain the state between components.
